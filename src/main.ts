@@ -1,7 +1,7 @@
 import shader from "./cell.wgsl?raw";
 import life from "./life.wgsl?raw";
 
-const GRID_SIZE = 100;
+const GRID_SIZE = 1000;
 
 if (!navigator.gpu) {
   throw new Error("WebGPU not supported on this browser.");
@@ -47,9 +47,7 @@ for (let i = 0; i < cellStateArray.length; i += 3) {
 }
 device.queue.writeBuffer(cellStateStorage[0], 0, cellStateArray);
 
-const vertices = new Float32Array([
-  -0.8, -0.8, 0.8, -0.8, 0.8, 0.8, -0.8, -0.8, 0.8, 0.8, -0.8, 0.8,
-]);
+const vertices = new Float32Array([-1, -1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1]);
 const vertexBuffer = device.createBuffer({
   label: "Cell vertices",
   size: vertices.byteLength,
