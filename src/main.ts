@@ -13,8 +13,14 @@ if (!adapter) {
 }
 const device = await adapter.requestDevice();
 
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+if (!canvas) {
+  throw new Error("Canvas element not found.");
+}
 const context = canvas.getContext("webgpu");
+if (!context) {
+  throw new Error("WebGPU context not found.");
+}
 const canvasFormat = navigator.gpu.getPreferredCanvasFormat();
 context.configure({
   device: device,
@@ -55,7 +61,7 @@ const vertexBuffer = device.createBuffer({
 });
 device.queue.writeBuffer(vertexBuffer, 0, vertices);
 
-const vertexBufferLayout = {
+const vertexBufferLayout: GPUVertexBufferLayout = {
   arrayStride: 8,
   attributes: [
     {
@@ -176,6 +182,7 @@ let step = 0;
 const UPDATE_INTERVAL = 20;
 
 function update() {
+  if (!context) return;
   const encoder = device.createCommandEncoder();
 
   const computePass = encoder.beginComputePass();
